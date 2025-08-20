@@ -1,9 +1,9 @@
 #here we define what a responce shuld look like
 
-from pydantic import BaseModel,EmailStr #to specify what a pos or a request shuld look like
+from pydantic import BaseModel,EmailStr, Field #to specify what a pos or a request shuld look like
 from datetime import datetime
 from typing import Optional, Annotated
-from pydantic.types import conint
+#from pydantic.types import Field 
 
 
 
@@ -63,7 +63,7 @@ class TokenData(BaseModel):
 #schema for votingon
 class Vote(BaseModel):
     post_id: int 
-    dir: Annotated[int,conint(ge=0,le=1)]
+    dir: Annotated[int,Field(ge=0,le=1)]
 
 class PostOut(BaseModel):
     Post: Post

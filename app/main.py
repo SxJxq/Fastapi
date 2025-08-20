@@ -7,7 +7,7 @@ from .config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
 
-models.Base.metadata.create_all(bind=engine) #we dont need it sense we have olembic
+#Base.metadata.create_all(bind=engine) #we dont need it sense we have olembic
 
 app = FastAPI()
 
@@ -29,6 +29,6 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return {"message": "lak sho hayda al7akiii"}
+    return {"message": "sososososo"}
 
 

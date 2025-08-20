@@ -1,0 +1,40 @@
+
+services:
+    # container name
+    api:
+        image: xxsolaxx/fastapi
+        depends_on:
+            - postgres
+        ports:
+            # port on localhost: port on container
+            - 80:8000
+        #volumes:
+                #adding it because when we change the code, it wont change in the container so our api wont change, so we will copy the machine files into our container, bind mount
+            #- ./:/user/src/app:ro
+        #command: uvicorn app.main:app --host 0.0.0.0 --port 8000 
+        # env_file:
+        #   - ./.env 
+        environment:
+            - DATABASE_HOSTNAME= ${DATABASE_HOSTNAME} #host.docker.internal
+            - DATABASE_PORT=${DATABASE_PORT}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - SECRET_KEY=${SECRET_KEY}
+            - ALGORITHM=${ALGORITHM}
+            - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+        
+
+    postgres:
+        image: postgres
+        environment:
+            # correct variables (mapping format)
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_DB: ${DATABASE_NAME}
+        # volumes so that we save container data on our local machine and when
+        # the container goes down or is deleted, the data will be safe
+        volumes:
+            - postgres-db:/var/lib/postgresql/data # path of the container
+
+volumes:
+    postgres-db:

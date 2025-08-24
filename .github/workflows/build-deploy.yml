@@ -37,7 +37,7 @@ jobs:
 
       - name: wait for postgres
         run: |
-          sudo apt-get install -y netcat
+          sudo apt-get install -y netcat-openbsd
           until nc -z localhost 5432; do
             echo "Waiting for PostgreSQL..."
             sleep 1

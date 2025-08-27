@@ -15,7 +15,6 @@ jobs:
         SECRET_KEY: ${{secrets.SECRET_KEY}}
         ALGORITHM: ${{secrets.ALGORITHM}}
         ACCESS_TOKEN_EXPIRE_MINUTES:  ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
-      
       services:
           postgres:
             image: postgres
@@ -44,6 +43,19 @@ jobs:
         - name: test with pytest
           run: | 
             pip install pytest
-            pytest 
-              
+            pytest
+        - name: Build and push
+          id: docker_build
+          uses: docker/build-push-action@v2
+          with:
+            context: ./
+            file: ./Dockerfile
+            builder: ${{ steps.buildx.outputs.name }}
+            push: true
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+            cache-from: type=local,src=/tmp/.buildx-cache
+            cache-to: type=local,dest=/tmp/.buildx-cache
+        - name: Image digest
+          run: echo ${{ steps.docker_build.outputs.digest }}
+               
 
